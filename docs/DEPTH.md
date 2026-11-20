@@ -15,6 +15,7 @@
 | M5 持仓重算 | 运行持仓重算并复核证据 | `POST /api/m5`；`/work/5` | `app/modules/m5_holdings/rules.py` | `tests/test_m5.py` |
 | M6 现金对账 | 运行现金对账并复核证据 | `POST /api/m6`；`/work/6` | `app/modules/m6_cash/rules.py` | `tests/test_m6.py` |
 | M7 修订回放 | 运行修订回放并复核证据 | `POST /api/m7`；`/work/7` | `app/modules/m7_revisions/rules.py` | `tests/test_m7.py` |
+| M8 撤销冲减 | 对已复核批次做追加式撤销并结批 | `POST /api/withdrawal` 等；`/work/8` | `app/modules/m8_withdrawal/rules.py` | `tests/test_m8.py` |
 
 ## 陷阱登记
 
@@ -28,6 +29,9 @@
 | TRAP-14 | 行动定义冲突 | 静默覆盖或误计 | 显式裁决并保留证据 | `app/modules/m2_mapping/rules.py` | `tests/test_m2.py::test_conflicting_action_removed` |
 | TRAP-24 | 现金尾差 | 静默覆盖或误计 | 显式裁决并保留证据 | `app/modules/m5_holdings/rules.py` | `tests/test_m5.py::test_largest_remainder_conservation` |
 | TRAP-25 | 行动版本选择 | 静默覆盖或误计 | 显式裁决并保留证据 | `app/modules/m2_mapping/rules.py` | `tests/test_m2.py::test_latest_action_chosen` |
+| TRAP-26 | 撤销已复核批次 | 立即减记或只停未付款，余额、凭证与支出对不上 | 追加式冲减：已付转应收、在途止付、未付终止，冲减额等于应付 | `app/modules/m8_withdrawal/rules.py` | `tests/test_m8.py::test_partial_paid_keeps_customer_balance_and_flags_receivable` |
+| TRAP-27 | 撤销决定重跑 | 重复冲减 | 批次+决定编号幂等键，同键同内容复用，不同内容409 | `app/withdrawal_store.py` | `tests/test_m8.py::test_same_decision_is_idempotent` |
+| TRAP-28 | 晚到付款改写已确认结果 | 已结批结果被回写 | 只追加事件，`confirmed_*`冻结，结批后到账转追回 | `app/modules/m8_withdrawal/rules.py` | `tests/test_m8.py::test_late_payment_after_closure_preserves_result` |
 
 ## 对账规则
 

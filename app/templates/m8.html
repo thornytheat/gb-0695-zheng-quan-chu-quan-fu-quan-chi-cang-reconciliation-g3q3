@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block stage_visual %}
+{% if withdrawal %}
+{% for r in withdrawal.rows[:5] %}
+<div class="entry {{'diff' if r['已付_CNY']!='0.00' else ''}}"><span>{{r['证券']}}<br><small>{{r['持仓记录']}}</small></span><b>{{r['冲减_CNY']}}<br><small>{{r['处理']}}</small></b></div>
+{% endfor %}
+<div class="entry"><span>状态</span><b>{{withdrawal.status}}</b></div>
+<div class="entry"><span>撤销决定</span><small>{{withdrawal.withdrawal_id}}</small></div>
+{% else %}
+<div class="empty">本批尚未建立撤销决定。</div>
+{% endif %}
+{% endblock %}

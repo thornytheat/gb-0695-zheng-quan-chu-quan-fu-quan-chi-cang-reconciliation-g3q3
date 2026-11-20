@@ -13,6 +13,7 @@ from app.modules.m4_factors.handler import bp as bp4
 from app.modules.m5_holdings.handler import bp as bp5
 from app.modules.m6_cash.handler import bp as bp6
 from app.modules.m7_revisions.handler import bp as bp7
+from app.modules.m8_withdrawal.handler import bp as bp8
 app=Flask(__name__)
 app.config['MAX_CONTENT_LENGTH']=5*1024*1024
 app.json.ensure_ascii=False
@@ -32,6 +33,7 @@ app.register_blueprint(bp4)
 app.register_blueprint(bp5)
 app.register_blueprint(bp6)
 app.register_blueprint(bp7)
+app.register_blueprint(bp8)
 @app.before_request
 def validate_request_object():
     if request.method!='POST': return None
